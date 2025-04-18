@@ -1,4 +1,8 @@
 #!/usr/bin/fish
-source /home/krzysztof/git/scrapper/venv/bin/activate.fish
-pip install -r /home/krzysztof/git/scrapper/requirements.txt
-/home/krzysztof/git/scrapper/venv/bin/python /home/krzysztof/git/scrapper/pl/zabicki/scrapper/notifier.py >> /home/krzysztof/scrapper/logs/notifier.log 2>&1
+source {$SCRAPPER_HOME}/venv/bin/activate.fish
+pip install -r {$SCRAPPER_HOME}/requirements.txt
+
+set -x DISPLAY :1
+set -x XAUTHORITY /run/user/1000/gdm/Xauthority
+
+{$SCRAPPER_HOME}/venv/bin/python {$SCRAPPER_HOME}/pl/zabicki/scrapper/notifier.py >> {$SCRAPPER_LOGS}/notifier.log 2>&1

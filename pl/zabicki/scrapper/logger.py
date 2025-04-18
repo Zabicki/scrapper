@@ -1,6 +1,7 @@
 import logging
+import os
 
-LOG_FILE = "scrapper/logs/scrapper.log"
+LOG_FILE = os.environ.get("SCRAPPER_LOGS") + "/scrapper.log"
 
 logging.basicConfig(
     filename=LOG_FILE,
