@@ -4,9 +4,9 @@ import json
 from logger import get_logger
 
 class CarStorage:
-    def __init__(self, filename = "scrapper/data/cars.json"):
+    def __init__(self):
         self.logger = get_logger(CarStorage.__name__)
-        self.filename = filename
+        self.filename = os.environ.get("HOME") + "/scrapper/data/cars.json"
         self.cars = self.load_cars()
 
     def load_cars(self):
