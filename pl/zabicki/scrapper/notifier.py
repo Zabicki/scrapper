@@ -53,7 +53,7 @@ class CarAuctionNotifier:
 
     def send_whatsapp_message(self, message_content):
         phone_number = os.environ.get("PHONE_NUMBER")
-        pywhatkit.sendwhatmsg_instantly(phone_number, message_content, wait_time=10)
+        pywhatkit.sendwhatmsg_instantly(phone_number, message_content, wait_time=10, tab_close=True)
 
     def send_email(self, message, receiver):
         credentials = self.get_email_credentials()
