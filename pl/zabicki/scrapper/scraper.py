@@ -46,7 +46,7 @@ class CarScraper:
                     break
 
             browser.close()
-            self.logger.info(f"Scraped {len(all_listings)} cars.")
+            self.logger.info(f"Scraped {len(all_listings)} cars")
             return all_listings
 
     def extract_car_data(self, soup):

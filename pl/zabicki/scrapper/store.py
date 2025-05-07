@@ -6,7 +6,7 @@ from logger import get_logger
 class CarStorage:
     def __init__(self):
         self.logger = get_logger(CarStorage.__name__)
-        self.filename = os.environ.get("HOME") + "/scrapper/data/cars.json"
+        self.filename = os.environ.get("SCRAPPER_DATA") + "/cars.json"
         self.cars = self.load_cars()
 
     def load_cars(self):
@@ -52,4 +52,5 @@ class CarStorage:
                              f"Model: {new_car["model"]} "
                              f"Mileage: {new_car["mileage"]} "
                              f"Year: {new_car["production year"]}")
+        self.logger.info(f"Found {len(new_cars)} new cars.")
         return new_cars
