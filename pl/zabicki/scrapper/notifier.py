@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-
+from message_buffer import MessageBuffer
 from scraper import CarScraper
 from store import CarStorage
+from email.message import EmailMessage
+from logger import get_logger
+
 import sys
 import smtplib
 import os
 import json
-from email.message import EmailMessage
 import pywhatkit
-
-from logger import get_logger
 
 
 def get_email_credentials():
@@ -28,21 +28,25 @@ class CarAuctionNotifier:
         self.logger = get_logger(CarAuctionNotifier.__name__)
         self.scraper = CarScraper(base_url)
         self.store = CarStorage()
+        self.message_buffer = MessageBuffer()
 
     def run(self):
         self.logger.info("Running car auction notifier")
         try:
             cars = self.scraper.get_car_listings()
-            new_cars = self.store.find_new_cars(cars)
+            self.message_buffer.add(self.store.find_new_cars(cars))
+            cars_to_send = self.message_buffer.get()
 
-            if len(new_cars) > 0:
-                self.send_email(self.format_message_content(new_cars))
-                self.send_whatsapp_message(self.format_message_content(new_cars))
+            if len(cars_to_send) > 0:
+                self.send_email(self.format_message_content(cars_to_send))
+                self.send_whatsapp_message(self.format_message_content(cars_to_send))
+                self.message_buffer.remove_buffered_messages()
+
             self.store.update_cars(cars)
         except Exception as e:
             self.logger.error(f"Error in notifier: {e}")
-            print(f"Error in notifier: {e}", file=sys.stderr)
-            sys.exit(1)
+            raise Exception(f"Error in notifier: {e}") from e
+
 
     def format_message_content(self, new_cars):
         car_strings = ["Nowe samochody są dostępne"]
